@@ -30,8 +30,12 @@ namespace Medical_Insurence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime(6)");
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .HasColumnType("date");
+
+                    b.Property<string>("IdCard")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<string>("Name")
                         .HasColumnType("longtext");
@@ -52,11 +56,15 @@ namespace Medical_Insurence.Migrations
 
                     MySqlPropertyBuilderExtensions.UseMySqlIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateCare")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<int>("IdBeneficiary")
+                    b.Property<int>("BenefId")
                         .HasColumnType("int");
+
+                    b.Property<string>("BenefIdCard")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<DateTime>("Date")
+                        .HasColumnType("datetime(6)");
 
                     b.Property<string>("TypeCare")
                         .HasColumnType("longtext");

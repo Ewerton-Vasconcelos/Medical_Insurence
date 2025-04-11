@@ -1,6 +1,7 @@
 ﻿using MySqlConnector;
 using System.Data;
 using Dapper;
+using Medical_Insurence.Models;
 
 public class BeneficiaryRepository
 {
@@ -11,16 +12,16 @@ public class BeneficiaryRepository
         _connection = new MySqlConnection(config.GetConnectionString("DefaultConnection"));
     }
 
-    public async Task<IEnumerable<string>> FirstLogicalQuestion()
+    public async Task<IEnumerable<string>> FirstSqlQuestion()
     {
         var sql = @$"select b.name
 
                        from medicalinsurence.beneficiaries b
                       inner join medicalinsurence.patientcares p
-                         on p.IdBeneficiary = b.Id
+                         on p.BenefId = b.Id
 
                       where b.status = 1
-                        and p.DateCare >= :TwelveMonths
+                        and p.Date >= @TwelveMonths
 
                       group by b.id, b.name
                      having count(p.Id) >= 3;
@@ -35,7 +36,7 @@ public class BeneficiaryRepository
         return result;
     }
 
-    public async Task<IEnumerable<string>> SecondLogicalQuestion()
+    public async Task<IEnumerable<string>> SecondSqlQuestion()
     {
         var sql = $@"select b.name,
 	                        p.TypeCare,
@@ -44,7 +45,7 @@ public class BeneficiaryRepository
                        from medicalinsurence.beneficiaries b
    
                       inner join medicalinsurence.patientcares p
-                        on p.IdBeneficiary = b.Id
+                        on p.BenefId = b.Id
  
                       group by p.TypeCare, b.Name
    
@@ -55,7 +56,7 @@ public class BeneficiaryRepository
         return result;
     }
 
-    public async Task<IEnumerable<string>> ThirdLogicalQuestion()
+    public async Task<IEnumerable<string>> ThirdSqlQuestion()
     {
         var sql = $@"select info.name,
 	                        info.qtd
@@ -65,7 +66,7 @@ public class BeneficiaryRepository
                        from medicalinsurence.patientcares p
    
                        inner join medicalinsurence.beneficiaries b
-                          on b.id = p.IdBeneficiary
+                          on b.id = p.BenefId
       
                       group by b.name) info
   
@@ -74,6 +75,40 @@ public class BeneficiaryRepository
                      LIMIT 5;";
 
         var result = await _connection.QueryAsync<string>(sql);
+
+        return result;
+    }
+
+    public async Task<int> AvgAgeBenef()
+    {
+        var sql = $@"select round(avg(info.Age)) as average
+
+                       from(select round(datediff(sysdate(), b.DateOfBirth)/365) as Age
+
+                              from medicalinsurence.beneficiaries b
+
+                             where b.status = 1) info;";
+
+        var result = await _connection.QuerySingleAsync<int>(sql);
+
+        return result;
+    }
+
+    public async Task<IEnumerable<Beneficiary>> NotAtendEighteen()
+    {
+        var sql = $@"SELECT b.Id,
+                            b.Name,
+                            b.Status
+
+                       FROM medicalinsurence.beneficiaries b
+
+                       LEFT JOIN medicalinsurence.patientcares p
+                         ON p.BenefId = b.Id
+                        AND p.Date >= DATE_SUB(CURDATE(), INTERVAL 18 MONTH)
+
+                      WHERE p.Id IS NULL;";
+
+        var result = await _connection.QueryAsync<Beneficiary>(sql);
 
         return result;
     }

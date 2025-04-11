@@ -12,6 +12,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddScoped<BeneficiaryRepository>();
 builder.Services.AddScoped<PatientCareRepository>();
+builder.Services.AddScoped<LogicQuestionsRepository>();
+builder.Services.AddScoped<ReportRepository>();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

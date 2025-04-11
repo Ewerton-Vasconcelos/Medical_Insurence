@@ -40,30 +40,48 @@ namespace Medical_Insurence.Controllers
         }
 
         //Get the beneficiaries of last twelve months.
-        [HttpGet("FirstLogical")]
-        public async Task<ActionResult<IEnumerable<Beneficiary>>> FirstLQ()
+        [HttpGet("FirstSql")]
+        public async Task<ActionResult<IEnumerable<Beneficiary>>> FirstSQ()
         {
-            var twelveMonthsBenef = await _repository.FirstLogicalQuestion();
+            var twelveMonthsBenef = await _repository.FirstSqlQuestion();
 
             return Ok(twelveMonthsBenef);
         }
 
         //Get the types of queries according to the beneficiaries.
-        [HttpGet("SecondLogical")]
-        public async Task<ActionResult<IEnumerable<Beneficiary>>> SecondLQ()
+        [HttpGet("SecondSql")]
+        public async Task<ActionResult<IEnumerable<Beneficiary>>> SecondSQ()
         {
-            var typesCares = await _repository.SecondLogicalQuestion();
+            var typesCares = await _repository.SecondSqlQuestion();
 
             return Ok(typesCares);
         }
 
         //Get the top five beneficiaries with the most queries
-        [HttpGet("ThirdLogical")]
-        public async Task<ActionResult<IEnumerable<Beneficiary>>> ThirdLQ()
+        [HttpGet("ThirdSql")]
+        public async Task<ActionResult<IEnumerable<Beneficiary>>> ThirdSQ()
         {
-            var mostQueries = await _repository.ThirdLogicalQuestion();
+            var mostQueries = await _repository.ThirdSqlQuestion();
 
             return Ok(mostQueries);
+        }
+
+        //Get average of the beneficiaries.
+        [HttpGet("AverageAgeBenef")]
+        public async Task<ActionResult> AverageAgeBeneficiaries()
+        {
+            var AvgAge = await _repository.AvgAgeBenef();
+
+            return Ok(AvgAge);
+        }
+
+        //Get beneficiaries not atend eighteen months ago.
+        [HttpGet("NotAtendEighteen")]
+        public async Task<ActionResult<IEnumerable<Beneficiary>>> NotAtend()
+        {
+            var beneficiaries = await _repository.NotAtendEighteen();
+
+            return Ok(beneficiaries);
         }
     }
 }

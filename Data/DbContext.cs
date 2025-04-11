@@ -9,7 +9,7 @@ namespace Medical_Insurence.Data
         {
         }
 
-        DbSet<Beneficiary> Beneficiaries { get; set; }
-        DbSet<PatientCare> PatientCares { get; set; }
+        public DbSet<Beneficiary> Beneficiaries { get; set; }
+        public DbSet<PatientCare> PatientCares { get; set; }
     }
 }

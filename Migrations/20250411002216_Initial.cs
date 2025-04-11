@@ -46,8 +46,19 @@ namespace Medical_Insurence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PatientCares", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_PatientCares_Beneficiaries_IdBeneficiary",
+                        column: x => x.IdBeneficiary,
+                        principalTable: "Beneficiaries",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_PatientCares_IdBeneficiary",
+                table: "PatientCares",
+                column: "IdBeneficiary");
         }
 
         /// <inheritdoc />

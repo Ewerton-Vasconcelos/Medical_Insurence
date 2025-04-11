@@ -23,7 +23,9 @@ namespace Medical_Insurence.Migrations
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
                     Name = table.Column<string>(type: "longtext", nullable: true)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    DateOfBirth = table.Column<DateTime>(type: "datetime(6)", nullable: true),
+                    IdCard = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    DateOfBirth = table.Column<DateOnly>(type: "date", nullable: true),
                     Status = table.Column<bool>(type: "tinyint(1)", nullable: true)
                 },
                 constraints: table =>
@@ -38,27 +40,18 @@ namespace Medical_Insurence.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("MySql:ValueGenerationStrategy", MySqlValueGenerationStrategy.IdentityColumn),
-                    IdBeneficiary = table.Column<int>(type: "int", nullable: false),
-                    DateCare = table.Column<DateTime>(type: "datetime(6)", nullable: false),
+                    BenefId = table.Column<int>(type: "int", nullable: false),
+                    BenefIdCard = table.Column<string>(type: "longtext", nullable: false)
+                        .Annotation("MySql:CharSet", "utf8mb4"),
                     TypeCare = table.Column<string>(type: "longtext", nullable: true)
-                        .Annotation("MySql:CharSet", "utf8mb4")
+                        .Annotation("MySql:CharSet", "utf8mb4"),
+                    Date = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PatientCares", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_PatientCares_Beneficiaries_IdBeneficiary",
-                        column: x => x.IdBeneficiary,
-                        principalTable: "Beneficiaries",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PatientCares_IdBeneficiary",
-                table: "PatientCares",
-                column: "IdBeneficiary");
         }
 
         /// <inheritdoc />
